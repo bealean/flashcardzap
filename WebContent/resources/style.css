@@ -1,0 +1,211 @@
+body {
+	font-size: medium;
+	font-family: sans-serif;
+	background-color: #daebf1; 
+	--main-text-color: #006280;
+	color: var(--main-text-color, black); 
+	--main-background-color-for-elements: #007599;
+}
+
+.btn {
+	padding: 5px 10px;
+	color: #FFFFFF;
+	background-color: var(--main-background-color-for-elements, blue);
+	border-color: #FFFFFF;
+}
+
+.btn:hover {
+	color: var(--main-text-color, blue);
+	background-color: #ffff33;
+	text-decoration: underline;
+	border-color: var(--main-text-color, blue);
+}
+
+.btn:active {
+	color: var(--main-text-color, blue);
+	background-color: #ffff33;
+	text-decoration: underline;
+}
+
+.border-less-table {
+	border: none;
+}
+
+.margin-bottom {
+	margin-bottom: 20px;
+}
+
+.margin-top-10 {
+	margin-top: 10px;
+}
+
+.table-border {
+	border-collapse: collapse;
+	border-color: #6db0c5;
+	border-style: solid;
+	border-width: 2px;
+	border-spacing: 20px;
+	max-width: 95%;
+}
+
+/* Home */
+
+#header-image {
+	z-index: -1;
+	max-width: 727px; 
+	width : 100%;
+	height: auto;
+	width: 100%;
+}
+
+/* shake css from https://www.w3schools.com/howto/howto_css_shake_image.asp*/
+.shake {
+	animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(3px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(3px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(1px, 2px) rotate(0deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+#card-info-category-header {
+	padding-left: 20px;
+}
+
+#category-cell {
+	padding-right: 20px;
+}
+
+#home-page-filter-table {
+	margin-top: -15px;
+	position: relative;
+}
+
+#home-page-filter-table > tr {
+	vertical-align:top;
+}
+
+#card-div {
+	border: 2px;
+	border-style: inset;
+	width: 650px;
+	height: 450px;
+	margin: 0px auto 10px auto;
+	background-color: #FFFFFF;
+	line-height: 1.8;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: bold;
+	color: #000000;
+	white-space:pre-wrap;
+	overflow-wrap: anywhere;
+	padding: 5px;
+}
+
+#home-flip-card-buttons {
+	margin-bottom: 10px;
+}
+
+hr {
+	margin-top: 20px;
+}
+
+/* Add/Edit Page */
+
+/* Form field text*/
+textarea, input {
+	font-family: sans-serif;
+	font-size: medium;
+}
+
+#edit-form-table textarea {
+	width:600px; 
+	height:200px; 
+	max-height:400px;
+}
+
+.add-edit-input {
+	width:300px;
+}
+
+#save-card-button {
+	margin-right: 10px;
+}
+
+#add-edit-cancel-button {
+	margin-left: 10px;
+}
+
+/* Add/edit card table shouldn't have border collapsed
+as bootstrap does for table and as set by class table-border,
+which includes other properties that this table should have. */
+
+#edit-form-table {
+	border-collapse: unset;
+}
+/* Add/edit card table specific row padding.*/
+.tbody-padding tr {
+	padding: 20px;
+}
+
+/* Manage Cardz */
+
+/* card-list is main Manage Cardz table*/
+#card-list tr:nth-child(even) {
+	background-color: #FFFFFF;
+}
+
+#card-list th, #card-list td {
+	border-collapse: collapse;
+	border-color: #6db0c5;
+	border-style: solid;
+	border-width: 2px;
+	padding: 5px;
+}
+
+#card-list th {
+	color: #FFFFFF;
+	background-color: var(--main-background-color-for-elements, blue);
+}
+
+#card-list td {
+	color: #000000;
+}
+
+.col-width {
+	width: 25%;
+}
+.col-wrap {
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+
+.button-column {
+	text-align: center;
+}
+.vertical-align-top {
+	vertical-align: top;
+}
+
+@media only screen and (max-width: 768px) {
+	.conditionally-hide {
+		display: none;
+	}
+	#card-div {
+		max-width: 650px;
+		width: 95%;
+		height: auto;
+	}
+}
+
+
