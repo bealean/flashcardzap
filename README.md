@@ -10,7 +10,7 @@ Java web application uses:
 - Spring MVC,
 - Spring JdbcTemplate, 
 - a PostgreSQL database,
-- JSP,
+- JavaServer Pages,
 - HTML,
 - CSS,
 - JavaScript,
