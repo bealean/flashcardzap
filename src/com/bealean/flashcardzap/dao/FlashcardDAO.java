@@ -6,20 +6,22 @@ import com.bealean.flashcardzap.model.Flashcard;
 
 public interface FlashcardDAO {
 
-	public int save(Flashcard flashcard);
+	int save(Flashcard flashcard);
 	
-	public int update(Flashcard flashcard);
+	int update(Flashcard flashcard);
 	
-	public int updateLast_Viewed(long id);
+	int updateLast_Viewed(long id);
 	
-	public int delete(long id);
+	int delete(long id);
 	
-	public Flashcard get(long id);
+	Flashcard get(long id);
 	
-	public Flashcard getNext(String category);
+	Flashcard getNext(String category);
 	
-	public List<Flashcard> list(String category);
+	List<Flashcard> list(String category);
 	
-	public List<String> listCategories();
+	List<String> listCategories();
+	
+	int exportFlashcards();
 	
 }

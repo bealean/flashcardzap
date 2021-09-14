@@ -7,6 +7,16 @@ body {
 	--main-background-color-for-elements: #007599;
 }
 
+.regular-link {
+	color: var(--main-text-color, blue);
+	text-decoration: underline;
+	font-size: small;
+}
+
+.regular-link:hover {
+	color: #0289b3;
+}
+
 .btn {
 	padding: 5px 10px;
 	color: #FFFFFF;

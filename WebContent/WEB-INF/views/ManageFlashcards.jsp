@@ -34,7 +34,7 @@
 				<div class="col-sm-8">
 					<img alt="Manage Flashcardz Header"
 						src="<c:url value="/flashcardzap/resources/managecardz.png"/>"
-						class=".img-responsive margin-bottom">
+						class=".img-responsive">
 				</div>
 				<div class="col-sm-2">
 					<a href="/flashcardzap/new" class="btn margin-top-10">New
@@ -42,7 +42,7 @@
 				</div>
 			</div>
 		</header>
-
+		<div id="export-div" class="margin-bottom"><a class="regular-link" href="/flashcardzap/export">Export All Cards</a></div>
 		<table class="border-less-table">
 			<tr class="vertical-align-top">
 				<th style="display: none;">Area</th>

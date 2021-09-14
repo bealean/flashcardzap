@@ -1,7 +1,13 @@
 package com.bealean.flashcardzap.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebInputException;
 import org.springframework.web.servlet.ModelAndView;
 import com.bealean.flashcardzap.dao.FlashcardDAO;
@@ -92,6 +99,35 @@ public class MainController {
 		int result = flashcardDAO.delete(id);
 		if (result != 1) {
 			throw new DeleteCardException();
+		}
+	}
+
+	@RequestMapping(value = "/export", method = RequestMethod.GET)
+	public void downloadFlashcards(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		int result = flashcardDAO.exportFlashcards();
+		if (result < 1) {
+			throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, "Export failed.");
+		}
+		String sourceFilePath = System.getenv("ENV_CONFIG") + "Flashcards.csv";
+		File file = new File(sourceFilePath);
+		String mimeType = "application/octet-stream";
+		response.setContentType(mimeType);
+		response.setContentLength((int) file.length());
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=\"Flashcards.csv\"";
+		response.setHeader(headerKey, headerValue);
+		try (InputStream inputStream = new FileInputStream(file);
+				OutputStream outputStream = response.getOutputStream()) {
+			final int BUFFER_SIZE = 4096;
+			byte[] buffer = new byte[BUFFER_SIZE];
+			// Returns bytes read or -1 at end of stream
+			int bytesRead = inputStream.read(buffer);
+			while (bytesRead != -1) {
+				outputStream.write(buffer, 0, bytesRead);
+				bytesRead = inputStream.read(buffer);
+			}
+		} catch (IOException e) {
+			System.out.println("Caught exception: " + e.getMessage());
 		}
 	}
 

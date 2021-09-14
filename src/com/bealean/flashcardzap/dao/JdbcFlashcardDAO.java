@@ -1,5 +1,8 @@
 package com.bealean.flashcardzap.dao;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -174,5 +177,29 @@ public class JdbcFlashcardDAO implements FlashcardDAO {
 		List<String> listCategories = jdbcTemplate.query(sql, rowMapper);
 
 		return listCategories;
+	}
+
+	@Override
+	public int exportFlashcards() {
+		int result = 0;
+		List<Flashcard> cardList = list("all");
+		String path = System.getenv("ENV_CONFIG");
+		File output = new File(path + "Flashcards.csv");
+		try (PrintWriter writer = new PrintWriter(output)){
+			writer.println("Front,Back,Area,Category,Subcategory");
+			for (Flashcard card : cardList) {
+				/* Replace double quotes in Front and Back values with two double quotes before
+				 * exporting to CSV. Model doesn't allow double quotes for other fields. 
+				 * The list method replaces < with &lt; for display on Manage Flashcards screen. Revert that replace for CSV.
+				 * Full values are also enclosed in double quotes in the println before exporting to CSV. */
+				String front = card.getFront().replace("\"", "\"\"").replace("&lt;", "<");
+				String back = card.getBack().replace("\"", "\"\"").replace("&lt;", "<");
+				writer.println("\""+front+"\",\""+back+"\",\""+card.getArea()+"\",\""+card.getCategory()+"\",\""+card.getSubcategory()+"\"");
+			}
+			result++;
+		} catch (FileNotFoundException e) {
+			System.out.println("Caught exception: " + e.getMessage());
+		} 
+		return result;
 	}
 }
