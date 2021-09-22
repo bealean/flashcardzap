@@ -50,8 +50,10 @@ public class JdbcFlashcardDAO implements FlashcardDAO {
 
 	@Override
 	public Flashcard get(long id) {
-		String sql = "SELECT * FROM flashcard f " + "LEFT OUTER JOIN flashcard_views fv " + "ON f.id = fv.flashcard_id "
-				+ "WHERE f.id = ? " + "ORDER BY fv.view_timestamp NULLS FIRST LIMIT 1";
+		String sql = "SELECT * FROM flashcard f "
+				+ "LEFT OUTER JOIN flashcard_views fv ON f.id = fv.flashcard_id "
+				+ "WHERE f.id = ? "
+				+ "ORDER BY fv.view_timestamp DESC LIMIT 1";
 
 		ResultSetExtractor<Flashcard> extractor = new ResultSetExtractor<Flashcard>() {
 
@@ -100,15 +102,22 @@ public class JdbcFlashcardDAO implements FlashcardDAO {
 		String sql;
 		if (category.contentEquals("all")) {
 			sql = "SELECT * FROM flashcard f "
-					+ "LEFT OUTER JOIN (SELECT flashcard_id, MAX(view_timestamp) AS \"last_viewed\" "
-					+ "FROM flashcard_views " + "GROUP BY flashcard_id) fv " + "ON f.id = fv.flashcard_id "
-					+ "ORDER BY last_viewed NULLS FIRST " + "LIMIT 1";
+					+ "LEFT OUTER JOIN "
+					+ "(SELECT flashcard_id, MAX(view_timestamp) AS \"last_viewed\" "
+					+ "FROM flashcard_views "
+					+ "GROUP BY flashcard_id) fv "
+					+ "ON f.id = fv.flashcard_id "
+					+ "ORDER BY last_viewed NULLS FIRST LIMIT 1";
 			return jdbcTemplate.query(sql, extractor);
 		} else {
 			sql = "SELECT * FROM flashcard f "
-					+ "LEFT OUTER JOIN (SELECT flashcard_id, MAX(view_timestamp) AS \"last_viewed\" "
-					+ "FROM flashcard_views " + "GROUP BY flashcard_id) fv " + "ON f.id = fv.flashcard_id "
-					+ "WHERE category IN (?)" + "ORDER BY last_viewed NULLS FIRST " + "LIMIT 1";
+					+ "LEFT OUTER JOIN "
+					+ "(SELECT flashcard_id, MAX(view_timestamp) AS \"last_viewed\" "
+					+ "FROM flashcard_views "
+					+ "GROUP BY flashcard_id) fv "
+					+ "ON f.id = fv.flashcard_id "
+					+ "WHERE category IN (?) "
+					+ "ORDER BY last_viewed NULLS FIRST LIMIT 1";
 			return jdbcTemplate.query(sql, extractor, category);
 		}
 	}
@@ -146,14 +155,21 @@ public class JdbcFlashcardDAO implements FlashcardDAO {
 
 		if (category.contentEquals("all")) {
 			sql = "SELECT * FROM flashcard f "
-					+ "LEFT OUTER JOIN (SELECT flashcard_id, MAX(view_timestamp) AS \"last_viewed\" FROM flashcard_views "
-					+ "GROUP BY flashcard_id) fv  " + "ON f.id = fv.flashcard_id "
+					+ "LEFT OUTER JOIN "
+					+ "(SELECT flashcard_id, MAX(view_timestamp) AS \"last_viewed\" "
+					+ "FROM flashcard_views "
+					+ "GROUP BY flashcard_id) fv "
+					+ "ON f.id = fv.flashcard_id "
 					+ "ORDER BY area, category, subcategory";
 			listFlashcards = jdbcTemplate.query(sql, rowMapper);
 		} else {
 			sql = "SELECT * FROM flashcard f "
-					+ "LEFT OUTER JOIN (SELECT flashcard_id, MAX(view_timestamp) AS \"last_viewed\" FROM flashcard_views "
-					+ "GROUP BY flashcard_id) fv " + "ON f.id = fv.flashcard_id " + "WHERE category in (?) "
+					+ "LEFT OUTER JOIN "
+					+ "(SELECT flashcard_id, MAX(view_timestamp) AS \"last_viewed\" "
+					+ "FROM flashcard_views "
+					+ "GROUP BY flashcard_id) fv "
+					+ "ON f.id = fv.flashcard_id "
+					+ "WHERE category in (?) "
 					+ "ORDER BY area, category, subcategory";
 			listFlashcards = jdbcTemplate.query(sql, rowMapper, category);
 		}
