@@ -20,7 +20,11 @@ public interface FlashcardDAO {
 	
 	List<Flashcard> list(String category);
 	
+	List<String> listAreas();
+	
 	List<String> listCategories();
+	
+	List<String> listSubcategories();
 	
 	int exportFlashcards();
 	

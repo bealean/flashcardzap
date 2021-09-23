@@ -42,17 +42,22 @@
 				</div>
 			</div>
 		</header>
-		<div id="export-div" class="margin-bottom"><a class="regular-link" href="/flashcardzap/export">Export All Cards</a></div>
+		<div id="export-div" class="margin-bottom">
+			<a class="regular-link" href="/flashcardzap/export">Export All
+				Cards</a>
+		</div>
 		<table class="border-less-table">
 			<tr class="vertical-align-top">
 				<th style="display: none;">Area</th>
-				<th><label for="category">Category</label> <select
-					name="category" id="category">
+				<th>
+				<label for="category">Category</label> 
+				<select name="category" id="category">
 						<option value="all">All</option>
 						<c:forEach items="${listCategories}" var="category">
 							<option value="${category}">${category}</option>
 						</c:forEach>
-				</select></th>
+				</select>
+				</th>
 				<th style="display: none;">Subcategory</th>
 			</tr>
 		</table>
@@ -80,7 +85,7 @@
 					<td>${flashcard.lastViewed}</td>
 					<td class="button-column"><a
 						href="/flashcardzap/edit?id=${flashcard.id}" class="btn">Edit</a>
-						&nbsp; &nbsp; 
+						&nbsp; &nbsp;
 						<button class="btn" onclick="deleteCard(${flashcard.id})">Delete</button>
 					</td>
 				</tr>

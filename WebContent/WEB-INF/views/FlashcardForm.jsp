@@ -5,7 +5,6 @@
 
 <!DOCTYPE html>
 <!-- TODO: 
-	- Add dropdown of existing values for area, category, and subcategory but allow new values to be typed.
 	- Add JS to limit rows entered to 16.
  -->
 
@@ -51,18 +50,36 @@
 					</tr>
 					<tr>
 						<th>Area:</th>
-						<td><form:input path="area" class="add-edit-input"
-								maxlength="30" type="text" /></td>
+						<td>
+							<form:input path="area" class="add-edit-input" maxlength="30" type="text" list="areas"/>
+							<datalist id="areas">
+								<c:forEach items="${listAreas}" var="area">
+									<option value="${area}">${area}</option>
+								</c:forEach>
+							</datalist>
+						</td>
 					</tr>
 					<tr>
 						<th>Category:</th>
-						<td><form:input path="category" class="add-edit-input"
-								maxlength="30" type="text" /></td>
+						<td>
+						<form:input path="category" class="add-edit-input" maxlength="30" type="text" list="categories"/>
+						<datalist id="categories">
+							<c:forEach items="${listCategories}" var="category">
+								<option value="${category}">${category}</option>
+							</c:forEach>
+						</datalist>
+						</td>
 					</tr>
 					<tr>
 						<th>Subcategory:</th>
-						<td><form:input path="subcategory" class="add-edit-input"
-								maxlength="30" type="text" /></td>
+						<td>
+						<form:input path="subcategory" class="add-edit-input" maxlength="30" type="text" list="subcategories"/>
+							<datalist id="subcategories">
+								<c:forEach items="${listSubcategories}" var="subcategory">
+									<option value="${subcategory}">${subcategory}</option>
+								</c:forEach>
+							</datalist>
+						</td>
 					</tr>
 					<tr>
 						<td colspan="2" align="center"><input id="save-card-button"

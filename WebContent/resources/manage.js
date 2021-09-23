@@ -28,7 +28,6 @@ $(document).ready(function() {
 	$("#category").val(category);
 
 	$("#category").on('change', function() {
-		// alert( this.value );
 		let url = "/flashcardzap/manage?category=" + this.value
 		window.location.href = url;
 	});

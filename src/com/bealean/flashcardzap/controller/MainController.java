@@ -66,6 +66,12 @@ public class MainController {
 	public ModelAndView newFlashcard(ModelAndView model) {
 		Flashcard newFlashcard = new Flashcard();
 		model.addObject("flashcard", newFlashcard);
+		List<String> listAreas = flashcardDAO.listAreas();
+		model.addObject("listAreas", listAreas);
+		List<String> listCategories = flashcardDAO.listCategories();
+		model.addObject("listCategories", listCategories);
+		List<String> listSubcategories = flashcardDAO.listSubcategories();
+		model.addObject("listSubcategories", listSubcategories);
 		model.setViewName("FlashcardForm");
 		return model;
 	}
@@ -76,6 +82,12 @@ public class MainController {
 		Flashcard flashcard = flashcardDAO.get(id);
 		ModelAndView model = new ModelAndView("FlashcardForm");
 		model.addObject("flashcard", flashcard);
+		List<String> listAreas = flashcardDAO.listAreas();
+		model.addObject("listAreas", listAreas);
+		List<String> listCategories = flashcardDAO.listCategories();
+		model.addObject("listCategories", listCategories);
+		List<String> listSubcategories = flashcardDAO.listSubcategories();
+		model.addObject("listSubcategories", listSubcategories);
 		return model;
 	}
 

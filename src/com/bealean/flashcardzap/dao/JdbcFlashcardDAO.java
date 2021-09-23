@@ -176,6 +176,24 @@ public class JdbcFlashcardDAO implements FlashcardDAO {
 
 		return listFlashcards;
 	}
+	
+	@Override
+	public List<String> listAreas() {
+
+		RowMapper<String> rowMapper = new RowMapper<String>() {
+
+			@Override
+			public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+				String area = rs.getString("area");
+				return area;
+			}
+		};
+
+		String sql = "SELECT DISTINCT area FROM flashcard ORDER BY area";
+		List<String> listAreas = jdbcTemplate.query(sql, rowMapper);
+
+		return listAreas;
+	}
 
 	@Override
 	public List<String> listCategories() {
@@ -193,6 +211,24 @@ public class JdbcFlashcardDAO implements FlashcardDAO {
 		List<String> listCategories = jdbcTemplate.query(sql, rowMapper);
 
 		return listCategories;
+	}
+	
+	@Override
+	public List<String> listSubcategories() {
+
+		RowMapper<String> rowMapper = new RowMapper<String>() {
+
+			@Override
+			public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+				String subcategory = rs.getString("subcategory");
+				return subcategory;
+			}
+		};
+
+		String sql = "SELECT DISTINCT subcategory FROM flashcard ORDER BY subcategory";
+		List<String> listSubcategories = jdbcTemplate.query(sql, rowMapper);
+
+		return listSubcategories;
 	}
 
 	@Override
