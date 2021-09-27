@@ -10,7 +10,6 @@ $(document).ready(function(){
 		fetch(url).then (response => {
 			return response.json();
 		}).then (data => {
-			console.log(data);
 			$('#card-div').text(data.front);
 			$('#card-back').text(data.back);
 			$('#area-cell').text(data.area);

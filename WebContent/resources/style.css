@@ -104,23 +104,6 @@ body {
 	vertical-align:top;
 }
 
-#card-div {
-	border: 2px;
-	border-style: inset;
-	width: 650px;
-	height: 450px;
-	margin: 0px auto 10px auto;
-	background-color: #FFFFFF;
-	line-height: 1.8;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-weight: bold;
-	color: #000000;
-	white-space:pre-wrap;
-	overflow-wrap: anywhere;
-	padding: 5px;
-}
 
 #home-flip-card-buttons {
 	margin-bottom: 10px;
@@ -130,18 +113,34 @@ hr {
 	margin-top: 20px;
 }
 
-/* Add/Edit Page */
-
-/* Form field text*/
-textarea, input {
-	font-family: sans-serif;
-	font-size: medium;
+#card-div {
+	height: 450px;
+	margin: 0px auto 10px auto;
+	background-color: #FFFFFF;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #000000;
 }
 
+/* Add/Edit Page's textarea fields for Front and Back share properties  
+with card-div to ensure entered text fits on displayed card. */
+#card-div, textarea {
+	font-weight: bold;
+	line-height: 1.8;
+	width:650px; 
+	padding: 5px;
+	border: 2px;
+	border-style: inset;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+
+/* Add/Edit Page */
+
 #edit-form-table textarea {
-	width:600px; 
 	height:200px; 
-	max-height:400px;
+	max-height:450px;
 }
 
 .add-edit-input {
@@ -156,13 +155,12 @@ textarea, input {
 	margin-left: 10px;
 }
 
-/* Add/edit card table shouldn't have border collapsed
-as bootstrap does for table and as set by class table-border,
-which includes other properties that this table should have. */
+/* Unset border-collapse from table-border class and Bootstrap table. */
 
 #edit-form-table {
 	border-collapse: unset;
 }
+
 /* Add/edit card table specific row padding.*/
 .tbody-padding tr {
 	padding: 20px;

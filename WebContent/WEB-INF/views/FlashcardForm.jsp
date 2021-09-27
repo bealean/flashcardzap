@@ -4,10 +4,6 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 <!DOCTYPE html>
-<!-- TODO: 
-	- Add JS to limit rows entered to 16.
- -->
-
 <html>
 <head>
 <meta charset="UTF-8">
@@ -92,6 +88,6 @@
 		</form:form>
 
 	</div>
-
+	<script src="<c:url value="/flashcardzap/resources/add-edit.js"/>"></script>
 </body>
 </html>
