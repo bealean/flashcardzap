@@ -31,23 +31,23 @@
 
 <body>
 	<header style="text-align: center;">
-
-		<div class="row no-gutters">
-			<div class="col-sm-2"></div>
-			<div class="col-sm-8">
-				<img id=header-image alt="flashcardzap Header"
-					src="<c:url value="/flashcardzap/resources/flashcardzhead_plain.png"/>"
-					class="img-responsive margin-bottom">
-			</div>
-			<div class="col-sm-2">
-				<nav>
-					<a href="/flashcardzap/manage?category=all"
-						id="home-page-manage-button"
-						class="btn conditionally-hide margin-top-10">Manage Flashcards</a>
-				</nav>
+		<div class="container-fluid">
+			<div class="row no-gutters">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-8">
+					<img id=header-image alt="flashcardzap Header"
+						src="<c:url value="/flashcardzap/resources/flashcardzhead_plain.png"/>"
+						class="img-responsive margin-bottom">
+				</div>
+				<div class="col-sm-2">
+					<nav>
+						<a href="/flashcardzap/manage?category=all"
+							id="home-page-manage-button"
+							class="btn conditionally-hide margin-top-10">Manage Flashcards</a>
+					</nav>
+				</div>
 			</div>
 		</div>
-
 	</header>
 
 	<div align="center">
