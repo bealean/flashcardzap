@@ -116,7 +116,7 @@ public class JdbcFlashcardDAO implements FlashcardDAO {
 					+ "FROM flashcard_views "
 					+ "GROUP BY flashcard_id) fv "
 					+ "ON f.id = fv.flashcard_id "
-					+ "WHERE category IN (?) "
+					+ "WHERE category = ? "
 					+ "ORDER BY last_viewed NULLS FIRST LIMIT 1";
 			return jdbcTemplate.query(sql, extractor, category);
 		}
@@ -169,7 +169,7 @@ public class JdbcFlashcardDAO implements FlashcardDAO {
 					+ "FROM flashcard_views "
 					+ "GROUP BY flashcard_id) fv "
 					+ "ON f.id = fv.flashcard_id "
-					+ "WHERE category in (?) "
+					+ "WHERE category = ? "
 					+ "ORDER BY area, category, subcategory";
 			listFlashcards = jdbcTemplate.query(sql, rowMapper, category);
 		}
