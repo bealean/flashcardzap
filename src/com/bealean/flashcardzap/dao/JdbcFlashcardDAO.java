@@ -5,11 +5,14 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
+
 import com.bealean.flashcardzap.model.Flashcard;
 
 public class JdbcFlashcardDAO implements FlashcardDAO {
@@ -50,10 +53,8 @@ public class JdbcFlashcardDAO implements FlashcardDAO {
 
 	@Override
 	public Flashcard get(long id) {
-		String sql = "SELECT * FROM flashcard f "
-				+ "LEFT OUTER JOIN flashcard_views fv ON f.id = fv.flashcard_id "
-				+ "WHERE f.id = ? "
-				+ "ORDER BY fv.view_timestamp DESC LIMIT 1";
+		String sql = "SELECT * FROM flashcard f " + "LEFT OUTER JOIN flashcard_views fv ON f.id = fv.flashcard_id "
+				+ "WHERE f.id = ? " + "ORDER BY fv.view_timestamp DESC LIMIT 1";
 
 		ResultSetExtractor<Flashcard> extractor = new ResultSetExtractor<Flashcard>() {
 
@@ -77,7 +78,7 @@ public class JdbcFlashcardDAO implements FlashcardDAO {
 	}
 
 	@Override
-	public Flashcard getNext(String category) {
+	public Flashcard getNext(String area, String category, String subcategory) {
 
 		ResultSetExtractor<Flashcard> extractor = new ResultSetExtractor<Flashcard>() {
 
@@ -99,26 +100,29 @@ public class JdbcFlashcardDAO implements FlashcardDAO {
 			}
 		};
 
-		String sql;
-		if (category.contentEquals("all")) {
-			sql = "SELECT * FROM flashcard f "
-					+ "LEFT OUTER JOIN "
-					+ "(SELECT flashcard_id, MAX(view_timestamp) AS \"last_viewed\" "
-					+ "FROM flashcard_views "
-					+ "GROUP BY flashcard_id) fv "
-					+ "ON f.id = fv.flashcard_id "
-					+ "ORDER BY last_viewed NULLS FIRST LIMIT 1";
+		/*
+		 * UI does not allow a category to be selected without an area or a subcategory
+		 * to be selected without a category.
+		 */
+		String sql = "SELECT * FROM flashcard f " + "LEFT OUTER JOIN "
+				+ "(SELECT flashcard_id, MAX(view_timestamp) AS \"last_viewed\" " + "FROM flashcard_views "
+				+ "GROUP BY flashcard_id) fv " + "ON f.id = fv.flashcard_id ";
+		String orderBy = "ORDER BY last_viewed NULLS FIRST LIMIT 1";
+		if (area.equals("all") && category.equals("all") && subcategory.equals("all")) {
+			sql += orderBy;
 			return jdbcTemplate.query(sql, extractor);
+		} else if (category.equals("all") && subcategory.equals("all")) {
+			sql += "WHERE area = ? ";
+			sql += orderBy;
+			return jdbcTemplate.query(sql, extractor, area);
+		} else if (subcategory.equals("all")) {
+			sql += "WHERE area = ? AND category = ? ";
+			sql += orderBy;
+			return jdbcTemplate.query(sql, extractor, area, category);
 		} else {
-			sql = "SELECT * FROM flashcard f "
-					+ "LEFT OUTER JOIN "
-					+ "(SELECT flashcard_id, MAX(view_timestamp) AS \"last_viewed\" "
-					+ "FROM flashcard_views "
-					+ "GROUP BY flashcard_id) fv "
-					+ "ON f.id = fv.flashcard_id "
-					+ "WHERE category = ? "
-					+ "ORDER BY last_viewed NULLS FIRST LIMIT 1";
-			return jdbcTemplate.query(sql, extractor, category);
+			sql += "WHERE area = ? AND category = ? AND subcategory = ? ";
+			sql += orderBy;
+			return jdbcTemplate.query(sql, extractor, area, category, subcategory);
 		}
 	}
 
@@ -154,29 +158,22 @@ public class JdbcFlashcardDAO implements FlashcardDAO {
 		List<Flashcard> listFlashcards;
 
 		if (category.contentEquals("all")) {
-			sql = "SELECT * FROM flashcard f "
-					+ "LEFT OUTER JOIN "
-					+ "(SELECT flashcard_id, MAX(view_timestamp) AS \"last_viewed\" "
-					+ "FROM flashcard_views "
-					+ "GROUP BY flashcard_id) fv "
-					+ "ON f.id = fv.flashcard_id "
+			sql = "SELECT * FROM flashcard f " + "LEFT OUTER JOIN "
+					+ "(SELECT flashcard_id, MAX(view_timestamp) AS \"last_viewed\" " + "FROM flashcard_views "
+					+ "GROUP BY flashcard_id) fv " + "ON f.id = fv.flashcard_id "
 					+ "ORDER BY area, category, subcategory";
 			listFlashcards = jdbcTemplate.query(sql, rowMapper);
 		} else {
-			sql = "SELECT * FROM flashcard f "
-					+ "LEFT OUTER JOIN "
-					+ "(SELECT flashcard_id, MAX(view_timestamp) AS \"last_viewed\" "
-					+ "FROM flashcard_views "
-					+ "GROUP BY flashcard_id) fv "
-					+ "ON f.id = fv.flashcard_id "
-					+ "WHERE category = ? "
+			sql = "SELECT * FROM flashcard f " + "LEFT OUTER JOIN "
+					+ "(SELECT flashcard_id, MAX(view_timestamp) AS \"last_viewed\" " + "FROM flashcard_views "
+					+ "GROUP BY flashcard_id) fv " + "ON f.id = fv.flashcard_id " + "WHERE category = ? "
 					+ "ORDER BY area, category, subcategory";
 			listFlashcards = jdbcTemplate.query(sql, rowMapper, category);
 		}
 
 		return listFlashcards;
 	}
-	
+
 	@Override
 	public List<String> listAreas() {
 
@@ -212,7 +209,7 @@ public class JdbcFlashcardDAO implements FlashcardDAO {
 
 		return listCategories;
 	}
-	
+
 	@Override
 	public List<String> listSubcategories() {
 
@@ -232,27 +229,73 @@ public class JdbcFlashcardDAO implements FlashcardDAO {
 	}
 
 	@Override
+	public List<String> getCategories(String areaName) {
+		List<String> categoryList = new ArrayList<>();
+		SqlRowSet results;
+		String sql;
+
+		/*
+		 * UI does not allow a category to be selected without an Area selected.
+		 */
+
+		sql = "SELECT DISTINCT category FROM flashcard " + "WHERE area = ? " + "ORDER BY category";
+		results = jdbcTemplate.queryForRowSet(sql, areaName);
+
+		while (results.next()) {
+			categoryList.add(results.getString("category"));
+		}
+
+		return categoryList;
+	}
+
+	@Override
+	public List<String> getSubcategories(String areaName, String categoryName) {
+		List<String> subcategoryList = new ArrayList<>();
+		SqlRowSet results;
+		String sql;
+
+		/*
+		 * UI does not allow a subcategory to be selected without an Area and Category
+		 * selected.
+		 */
+
+		sql = "SELECT DISTINCT subcategory FROM flashcard " + "WHERE area = ? AND category = ? "
+				+ "ORDER BY subcategory";
+		results = jdbcTemplate.queryForRowSet(sql, areaName, categoryName);
+
+		while (results.next()) {
+			subcategoryList.add(results.getString("subcategory"));
+		}
+
+		return subcategoryList;
+	}
+
+	@Override
 	public int exportFlashcards() {
 		int result = 0;
 		List<Flashcard> cardList = list("all");
 		String path = System.getenv("ENV_CONFIG");
 		File output = new File(path + "Flashcards.csv");
-		try (PrintWriter writer = new PrintWriter(output)){
+		try (PrintWriter writer = new PrintWriter(output)) {
 			writer.println("Row,Front,Back,Area,Category,Subcategory");
 			for (int row = 1; row <= cardList.size(); row++) {
-				/* Replace double quotes in Front and Back values with two double quotes before
-				 * exporting to CSV. Model doesn't allow double quotes for other fields. 
-				 * The list method replaces < with &lt; for display on Manage Flashcards screen. Revert that replace for CSV.
-				 * Full values are also enclosed in double quotes in the println before exporting to CSV. */
+				/*
+				 * Replace double quotes in Front and Back values with two double quotes before
+				 * exporting to CSV. Model doesn't allow double quotes for other fields. The
+				 * list method replaces < with &lt; for display on Manage Flashcards screen.
+				 * Revert that replace for CSV. Full values are also enclosed in double quotes
+				 * in the println before exporting to CSV.
+				 */
 				Flashcard card = cardList.get(row - 1);
 				String front = card.getFront().replace("\"", "\"\"").replace("&lt;", "<");
 				String back = card.getBack().replace("\"", "\"\"").replace("&lt;", "<");
-				writer.println("\""+row+"\",\""+front+"\",\""+back+"\",\""+card.getArea()+"\",\""+card.getCategory()+"\",\""+card.getSubcategory()+"\"");
+				writer.println("\"" + row + "\",\"" + front + "\",\"" + back + "\",\"" + card.getArea() + "\",\""
+						+ card.getCategory() + "\",\"" + card.getSubcategory() + "\"");
 			}
 			result++;
 		} catch (FileNotFoundException e) {
 			System.out.println("Caught exception: " + e.getMessage());
-		} 
+		}
 		return result;
 	}
 }

@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.bealean.flashcardzap.dao.FlashcardDAO;
 import com.bealean.flashcardzap.exceptions.DeleteCardException;
 import com.bealean.flashcardzap.model.Flashcard;
+import com.google.gson.Gson;
 
 @Controller
 public class MainController {
@@ -34,19 +35,42 @@ public class MainController {
 	@RequestMapping(value = "/")
 	public ModelAndView showFlashcard() {
 		ModelAndView model = new ModelAndView("index");
-		List<String> listCategories = flashcardDAO.listCategories();
-		model.addObject("listCategories", listCategories);
+		List<String> listAreas = flashcardDAO.listAreas();
+		model.addObject("listAreas", listAreas);
 		model.addObject("front", "Optionally select a category and click Show Question.");
 		// Call getNext to speed up display of first question later.
-		flashcardDAO.getNext("all");
+		flashcardDAO.getNext("all", "all", "all");
 		return model;
+	}
+
+	@RequestMapping(value = "/categories", method = RequestMethod.GET)
+	public void getCategories(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String areaName = request.getParameter("area");
+		List<String> listCategories = flashcardDAO.getCategories(areaName);
+		String json = new Gson().toJson(listCategories);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
+	}
+
+	@RequestMapping(value = "/subcategories", method = RequestMethod.GET)
+	public void getSubcategories(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String areaName = request.getParameter("area");
+		String categoryName = request.getParameter("category");
+		List<String> listSubcategories = flashcardDAO.getSubcategories(areaName, categoryName);
+		String json = new Gson().toJson(listSubcategories);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
 	}
 
 	@RequestMapping(value = "/showQuestion", method = RequestMethod.GET)
 	@ResponseBody
 	public Flashcard showQuestion(HttpServletRequest request) {
+		String area = request.getParameter("area");
 		String category = request.getParameter("category");
-		Flashcard flashcard = flashcardDAO.getNext(category);
+		String subcategory = request.getParameter("subcategory");
+		Flashcard flashcard = flashcardDAO.getNext(area, category, subcategory);
 		flashcardDAO.updateLast_Viewed(flashcard.getId());
 		return flashcard;
 	}

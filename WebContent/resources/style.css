@@ -61,11 +61,9 @@ body {
 /* Home */
 
 #header-image {
-	z-index: -1;
 	max-width: 727px; 
 	width : 100%;
 	height: auto;
-	width: 100%;
 }
 
 /* shake css from https://www.w3schools.com/howto/howto_css_shake_image.asp*/
@@ -87,17 +85,12 @@ body {
   100% { transform: translate(1px, -2px) rotate(-1deg); }
 }
 
-#card-info-category-header {
+.category-header {
 	padding-left: 20px;
 }
 
-#category-cell {
+.category-data {
 	padding-right: 20px;
-}
-
-#home-page-filter-table {
-	margin-top: -15px;
-	position: relative;
 }
 
 #home-page-filter-table > tr {
@@ -106,7 +99,7 @@ body {
 
 
 #home-flip-card-buttons {
-	margin-bottom: 50px;
+	margin-bottom: 30px;
 }
 
 hr {

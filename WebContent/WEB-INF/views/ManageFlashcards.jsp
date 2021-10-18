@@ -50,13 +50,13 @@
 			<tr class="vertical-align-top">
 				<th style="display: none;">Area</th>
 				<th>
-				<label for="category">Category</label> 
-				<select name="category" id="category">
+					<label for="category">Category</label> 
+					<select name="category" id="category">
 						<option value="all">All</option>
 						<c:forEach items="${listCategories}" var="category">
 							<option value="${category}">${category}</option>
 						</c:forEach>
-				</select>
+					</select>
 				</th>
 				<th style="display: none;">Subcategory</th>
 			</tr>

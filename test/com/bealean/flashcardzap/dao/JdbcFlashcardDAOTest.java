@@ -58,7 +58,7 @@ class JdbcFlashcardDAOTest {
 		that does not have a record in flashcard_views. */
 		String sql = "INSERT INTO flashcard (front, back) VALUES ('test','test')";
 		jdbcTemplate.update(sql);
-		String lastViewedOfNextCard = dao.getNext("all").getLastViewed();		
+		String lastViewedOfNextCard = dao.getNext("all","all","all").getLastViewed();		
 		assertTrue(lastViewedOfNextCard == null, "getNext with unviewed cards returns a card with null lastViewed");
 	}
 	
@@ -66,7 +66,7 @@ class JdbcFlashcardDAOTest {
 	void getNext_allCategoriesNoUnviewedCards_returnsCardWithMinLastViewed() {
 		String sql = "DELETE FROM flashcard f WHERE NOT EXISTS (SELECT 1 FROM flashcard_views fv WHERE fv.flashcard_id = f.id)";
 		jdbcTemplate.update(sql);
-		String lastViewedOfNextCard = dao.getNext("all").getLastViewed();	
+		String lastViewedOfNextCard = dao.getNext("all","all","all").getLastViewed();	
 		/* Record in flashcard_views for each time card is viewed. Null view_timestamp not allowed in flashcard_views.
 		 Get Max last viewed for each individual card and then sort ascending to get the least recently viewed card. */
 		sql = "SELECT MAX(view_timestamp) " + 
