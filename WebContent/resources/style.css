@@ -49,6 +49,10 @@ body {
 	margin-top: 10px;
 }
 
+.extra-padding-bottom {
+	padding-bottom: 60px;
+}
+
 .table-border {
 	border-collapse: collapse;
 	border-color: #6db0c5;

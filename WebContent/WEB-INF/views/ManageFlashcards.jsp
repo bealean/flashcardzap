@@ -5,10 +5,9 @@
 
 <!DOCTYPE html>
 <!-- TODO: 
-	- Additional Filters
+	- Limit rows displayed on load using pagination or infinite scroll
 	- Sort
 	- Save Filters for return from Add/Edit
-	- Limit rows displayed on load using pagination or infinite scroll
  -->
 <html>
 <head>
@@ -17,14 +16,13 @@
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
 	integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
 	crossorigin="anonymous">
-<link href="<c:url value="/flashcardzap/resources/style.css"/>"
-	rel="stylesheet">
+<link href="<c:url value="/flashcardzap/resources/style.css"/>" rel="stylesheet">
 
 <title>Manage Cardz</title>
 
 </head>
 <body>
-	<div align="center">
+	<div align="center" class="extra-padding-bottom">
 		<header style="text-align: center;">
 			<div class="row no-gutters">
 				<div class="col-sm-2">
@@ -46,19 +44,41 @@
 			<a class="regular-link" href="/flashcardzap/export">Export All
 				Cards</a>
 		</div>
-		<table class="border-less-table">
+		<table class="border-less-table" >
 			<tr class="vertical-align-top">
-				<th style="display: none;">Area</th>
 				<th>
-					<label for="category">Category</label> 
-					<select name="category" id="category">
+					<label for="area">Area</label> 
+				</th>
+				<td>
+					<select name="area" id="manage-area">
+						<option value="all">All</option>
+						<c:forEach items="${listAreas}" var="area">
+							<option value="${area}">${area}</option>
+						</c:forEach>
+					</select>
+				</td>
+				<th>
+					<label for="category" class="category-header">Category</label> 
+				</th>
+				<td class="category-data">
+					<select name="category" id="manage-category" disabled>
 						<option value="all">All</option>
 						<c:forEach items="${listCategories}" var="category">
 							<option value="${category}">${category}</option>
 						</c:forEach>
 					</select>
+				</td>
+				<th>
+					<label for="subcategory">Subcategory</label> 
 				</th>
-				<th style="display: none;">Subcategory</th>
+				<td>
+					<select name="subcategory" id="manage-subcategory" disabled>
+						<option value="all">All</option>
+						<c:forEach items="${listSubcategories}" var="subcategory">
+							<option value="${subcategory}">${subcategory}</option>
+						</c:forEach>
+					</select>
+				</td>
 			</tr>
 		</table>
 

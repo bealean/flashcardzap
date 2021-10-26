@@ -39,7 +39,7 @@
 					</div>
 					<div class="col-sm-2">
 						<nav>
-							<a href="/flashcardzap/manage?category=all"
+							<a href="/flashcardzap/manage?area=all&category=all&subcategory=all"
 								id="home-page-manage-button"
 								class="btn conditionally-hide margin-top-10">Manage Flashcards</a>
 						</nav>

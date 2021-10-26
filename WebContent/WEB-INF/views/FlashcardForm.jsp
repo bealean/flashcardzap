@@ -78,10 +78,11 @@
 						</td>
 					</tr>
 					<tr>
-						<td colspan="2" align="center"><input id="save-card-button"
-							type="submit" value="Save" class="btn"> <a
-							href="/flashcardzap/manage?category=all"
-							id="add-edit-cancel-button" class="btn">Cancel</a></td>
+						<td colspan="2" align="center">
+							<input id="save-card-button" type="submit" value="Save" class="btn"> 
+							<a href="/flashcardzap/manage?area=all&category=all&subcategory=all" 
+							id="add-edit-cancel-button" class="btn">Cancel</a>
+						</td>
 					</tr>
 				</tbody>
 			</table>

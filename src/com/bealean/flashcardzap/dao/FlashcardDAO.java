@@ -18,7 +18,7 @@ public interface FlashcardDAO {
 	
 	Flashcard getNext(String area, String category, String subcategory);
 	
-	List<Flashcard> list(String category);
+	List<Flashcard> list(String area, String category, String subcategory);
 	
 	List<String> listAreas();
 	

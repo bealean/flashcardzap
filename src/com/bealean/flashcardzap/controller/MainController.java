@@ -77,12 +77,18 @@ public class MainController {
 
 	@RequestMapping(value = "/manage", method = RequestMethod.GET)
 	public ModelAndView listFlashcard(HttpServletRequest request) {
+		String area = request.getParameter("area");
 		String category = request.getParameter("category");
-		List<Flashcard> listFlashcard = flashcardDAO.list(category);
+		String subcategory = request.getParameter("subcategory");
+		List<Flashcard> listFlashcard = flashcardDAO.list(area, category, subcategory);
 		ModelAndView model = new ModelAndView("ManageFlashcards");
 		model.addObject("listFlashcard", listFlashcard);
-		List<String> listCategories = flashcardDAO.listCategories();
+		List<String> listAreas = flashcardDAO.listAreas();
+		model.addObject("listAreas", listAreas);
+		List<String> listCategories = flashcardDAO.getCategories(area);
 		model.addObject("listCategories", listCategories);
+		List<String> listSubcategories = flashcardDAO.getSubcategories(area, category);
+		model.addObject("listSubcategories", listSubcategories);
 		return model;
 	}
 
@@ -125,7 +131,7 @@ public class MainController {
 		} else {
 			flashcardDAO.update(flashcard);
 		}
-		return new ModelAndView("redirect:/manage?category=all");
+		return new ModelAndView("redirect:/manage?area=all&category=all&subcategory=all");
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)

@@ -127,7 +127,7 @@ public class JdbcFlashcardDAO implements FlashcardDAO {
 	}
 
 	@Override
-	public List<Flashcard> list(String category) {
+	public List<Flashcard> list(String area, String category, String subcategory) {
 
 		RowMapper<Flashcard> rowMapper = new RowMapper<Flashcard>() {
 
@@ -157,18 +157,30 @@ public class JdbcFlashcardDAO implements FlashcardDAO {
 		String sql;
 		List<Flashcard> listFlashcards;
 
-		if (category.contentEquals("all")) {
+		if (area.equals("all")) {
 			sql = "SELECT * FROM flashcard f " + "LEFT OUTER JOIN "
 					+ "(SELECT flashcard_id, MAX(view_timestamp) AS \"last_viewed\" " + "FROM flashcard_views "
 					+ "GROUP BY flashcard_id) fv " + "ON f.id = fv.flashcard_id "
 					+ "ORDER BY area, category, subcategory";
 			listFlashcards = jdbcTemplate.query(sql, rowMapper);
+		} else if (category.equals("all")) {
+			sql = "SELECT * FROM flashcard f " + "LEFT OUTER JOIN "
+					+ "(SELECT flashcard_id, MAX(view_timestamp) AS \"last_viewed\" " + "FROM flashcard_views "
+					+ "GROUP BY flashcard_id) fv " + "ON f.id = fv.flashcard_id " + "WHERE area = ? "
+					+ "ORDER BY area, category, subcategory";
+			listFlashcards = jdbcTemplate.query(sql, rowMapper, area);
+		} else if (subcategory.equals("all")) {
+			sql = "SELECT * FROM flashcard f " + "LEFT OUTER JOIN "
+					+ "(SELECT flashcard_id, MAX(view_timestamp) AS \"last_viewed\" " + "FROM flashcard_views "
+					+ "GROUP BY flashcard_id) fv " + "ON f.id = fv.flashcard_id " + "WHERE area = ? AND category = ? "
+					+ "ORDER BY area, category, subcategory";
+			listFlashcards = jdbcTemplate.query(sql, rowMapper, area, category);
 		} else {
 			sql = "SELECT * FROM flashcard f " + "LEFT OUTER JOIN "
 					+ "(SELECT flashcard_id, MAX(view_timestamp) AS \"last_viewed\" " + "FROM flashcard_views "
-					+ "GROUP BY flashcard_id) fv " + "ON f.id = fv.flashcard_id " + "WHERE category = ? "
-					+ "ORDER BY area, category, subcategory";
-			listFlashcards = jdbcTemplate.query(sql, rowMapper, category);
+					+ "GROUP BY flashcard_id) fv " + "ON f.id = fv.flashcard_id "
+					+ "WHERE area = ? AND category = ? AND subcategory = ? " + "ORDER BY area, category, subcategory";
+			listFlashcards = jdbcTemplate.query(sql, rowMapper, area, category, subcategory);
 		}
 
 		return listFlashcards;
@@ -273,7 +285,7 @@ public class JdbcFlashcardDAO implements FlashcardDAO {
 	@Override
 	public int exportFlashcards() {
 		int result = 0;
-		List<Flashcard> cardList = list("all");
+		List<Flashcard> cardList = list("all", "all", "all");
 		String path = System.getenv("ENV_CONFIG");
 		File output = new File(path + "Flashcards.csv");
 		try (PrintWriter writer = new PrintWriter(output)) {
